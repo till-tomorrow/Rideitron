@@ -388,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements
                             == PackageManager.PERMISSION_GRANTED) {
 
                         //Request location updates:
-                        locationManager.requestLocationUpdates(provider, 400, 1);
+                        locationManager.requestLocationUpdates(provider, 400, 1, (android.location.LocationListener) this);
                     }
 
                 } else {
