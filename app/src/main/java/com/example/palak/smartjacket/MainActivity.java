@@ -1,5 +1,14 @@
 package com.example.palak.smartjacket;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.bluetooth.BluetoothAdapter;
@@ -13,13 +22,28 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+
+import android.Manifest;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, LocationListener {
+
+    private Location mLastLocation;
+    public LocationManager mLocationManager;
+
     TextView myLabel;
     EditText myTextbox;
     BluetoothAdapter mBluetoothAdapter;
@@ -36,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
     BluetoothSocket tmp;
     UUID uuid;
 
+    LocationManager locationManager;
+    String provider;
+
+
     private static final String TAG = "MyActivity";
 
     // Get a BluetoothSocket to connect with the given BluetoothDevice.
@@ -43,44 +71,30 @@ public class MainActivity extends AppCompatActivity {
 
     // Default UUID
     private UUID DEFAULT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 255;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button openButton = (Button)findViewById(R.id.open);
-        Button sendButton = (Button)findViewById(R.id.send);
-        Button closeButton = (Button)findViewById(R.id.close);
-        myLabel = (TextView)findViewById(R.id.label);
-        myTextbox = (EditText)findViewById(R.id.entry);
+        Button openButton = (Button) findViewById(R.id.open);
+        //Button sendButton = (Button)findViewById(R.id.send);
+        Button closeButton = (Button) findViewById(R.id.close);
+        myLabel = (TextView) findViewById(R.id.label);
+        myTextbox = (EditText) findViewById(R.id.entry);
 
-        //find UUID for the device
-        /*{
-            mmDevice = device;
-            try {
-                // Use the UUID of the device that discovered // TODO Maybe need extra device object
-                if (mmDevice != null)
-                {
-                    Log.i(TAG, "Device Name: " + mmDevice.getName());
-                    Log.i(TAG, "Device UUID: " + mmDevice.getUuids()[0].getUuid());
-                    tmp = device.createRfcommSocketToServiceRecord(mmDevice.getUuids()[0].getUuid());
+        int LOCATION_REFRESH_TIME = 1000;
+        int LOCATION_REFRESH_DISTANCE = 5;
 
-                }
-                else Log.d(TAG, "Device is null.");
-            }
-            catch (NullPointerException e)
-            {
-                Log.d(TAG, " UUID from device is null, Using Default UUID, Device name: " + device.getName());
-                try {
-                    tmp = device.createRfcommSocketToServiceRecord(DEFAULT_UUID);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-            catch (IOException e) { }
-        }*/
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        provider = locationManager.getBestProvider(new Criteria(), false);
+
+        checkLocationPermission();
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, (android.location.LocationListener) mLocationListener);
 
         //Open Button
         openButton.setOnClickListener(new View.OnClickListener()
@@ -91,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     findBT();
                     openBT();
+                    //findLocation();
                 }
                 catch (IOException ex) { }
             }
@@ -122,6 +137,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+
+            Toast.makeText(MainActivity.this, "onLocationChanged", Toast.LENGTH_SHORT).show();
+            mLastLocation = location;
+            // mainLabel.setText("Latitude:" + String.valueOf(location.getLatitude()) + "\n" + "Longitude:" + String.valueOf(location.getLongitude()));
+            Toast.makeText(MainActivity.this, "Latitude: " + String.valueOf(location.getLatitude()) + "\nLongitude: " + String.valueOf(location.getLongitude()) + "", Toast.LENGTH_LONG).show();
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Toast.makeText(MainActivity.this, "onStatusChanged", Toast.LENGTH_SHORT).show();
+        }
+
+        public void onProviderEnabled(String provider) {
+            Toast.makeText(MainActivity.this, "onProviderEnabled", Toast.LENGTH_SHORT).show();
+        }
+
+        public void onProviderDisabled(String provider) {
+            Toast.makeText(MainActivity.this, "onProviderDisabled", Toast.LENGTH_SHORT).show();
+            //turns off gps services
+        }
+    };
 
     void findBT()
     {
@@ -278,4 +317,125 @@ public class MainActivity extends AppCompatActivity {
         mmSocket.close();
         myLabel.setText("Bluetooth Closed");
     }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.title_location_permission)
+                        .setMessage(R.string.text_location_permission)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(MainActivity.this,
+                                        new String[]{Manifest.permission.READ_PHONE_STATE},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_PHONE_STATE},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult (int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+
+                        //Request location updates:
+                        locationManager.requestLocationUpdates(provider, 400, 1);
+                    }
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                }
+                return;
+            }
+
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        double lat = (double) (location.getLatitude());
+        double lng = (double) (location.getLongitude());
+        Toast.makeText(getApplicationContext(), lat+"----"+lng,Toast.LENGTH_LONG).show();
+        Log.i("Latitude------------", "Lattitude:" +lat);
+        Log.i("Longitude-------------", "Longitude:" +lng);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+    }
+
+/*    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            locationManager.requestLocationUpdates(provider, 400, 1, this);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            locationManager.removeUpdates(this);
+        }
+    }*/
 }

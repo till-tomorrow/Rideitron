@@ -40,17 +40,6 @@
         android:layout_marginLeft="33dp"
         android:layout_marginStart="33dp" />
 
-    <!--<Button
-        android:id="@+id/send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send"
-        android:layout_below="@+id/entry"
-        android:layout_toRightOf="@+id/close"
-        android:layout_toEndOf="@+id/close"
-        android:layout_marginLeft="22dp"
-        android:layout_marginStart="22dp" />
--->
 
     <Button
         android:id="@+id/open"
