@@ -33,14 +33,14 @@
         android:id="@+id/close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Close"
+        android:text="Close app"
         android:layout_below="@+id/entry"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="33dp"
         android:layout_marginStart="33dp" />
 
-    <Button
+    <!--<Button
         android:id="@+id/send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,12 +50,13 @@
         android:layout_toEndOf="@+id/close"
         android:layout_marginLeft="22dp"
         android:layout_marginStart="22dp" />
+-->
 
     <Button
         android:id="@+id/open"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Open"
+        android:text="Turn On Bluetooth"
         android:layout_below="@+id/entry"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"

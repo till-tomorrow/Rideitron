@@ -2,7 +2,6 @@ package com.example.palak.smartjacket;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Send Button
-        sendButton.setOnClickListener(new View.OnClickListener()
+        /*sendButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 catch (IOException ex) { }
             }
-        });
+        });*/
 
         //Close button
         closeButton.setOnClickListener(new View.OnClickListener()
@@ -263,13 +262,13 @@ public class MainActivity extends AppCompatActivity {
         workerThread.start();
     }
 
-    void sendData() throws IOException
+    /*void sendData() throws IOException
     {
         String msg = myTextbox.getText().toString();
         msg += "\n";
         mmOutputStream.write(msg.getBytes());
         myLabel.setText("Data Sent");
-    }
+    }*/
 
     void closeBT() throws IOException
     {
