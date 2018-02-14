@@ -8,6 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background"
+    android:alpha="0.9"
     tools:context="com.example.palak.smartjacket.MainActivity">
 
     <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,40 +18,62 @@
         android:layout_height="fill_parent"
         tools:ignore="TextFields,HardcodedText" >-->
 
-        <TextView
+        <!--<TextView
             android:id="@+id/label"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Type here:" />
+            android:textSize="20dp"
+            android:text="Current Latitude and Longitude:" />-->
 
-        <EditText
+       <!-- <EditText
             android:id="@+id/entry"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/label"
             android:background="@android:drawable/editbox_background" />
+-->
 
     <Button
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Close app"
-        android:layout_below="@+id/entry"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="33dp"
-        android:layout_marginStart="33dp" />
 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#fff"
+        android:background="@drawable/roundbutton"
+        android:text="Select Contacts"
+        android:padding="20dp"
+        android:layout_marginBottom="12dp"
+        android:id="@+id/buttonSelectContacts"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/open"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:alpha="1"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:text="Turn On Bluetooth"
-        android:layout_below="@+id/entry"
+        android:textSize="15dp"
+        android:padding="20dp"
+        android:textColor="#fff"
+        android:background="@drawable/circularbutton"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="15dp"
-        android:layout_marginEnd="15dp" />
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/close"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:textSize="15dp"
+        android:text="Close app"
+        android:padding="20dp"
+        android:alpha="1"
+        android:textColor="#fff"
+        android:background="@drawable/circularbutton"
+        android:layout_marginBottom="33dp"
+        android:layout_above="@+id/buttonSelectContacts"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 
 </RelativeLayout>

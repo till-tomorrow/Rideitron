@@ -79,10 +79,10 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         Button openButton = (Button) findViewById(R.id.open);
-        //Button sendButton = (Button)findViewById(R.id.send);
         Button closeButton = (Button) findViewById(R.id.close);
-        myLabel = (TextView) findViewById(R.id.label);
-        myTextbox = (EditText) findViewById(R.id.entry);
+        Button btnSelectContacts = (Button) findViewById(R.id.buttonSelectContacts);
+//        myLabel = (TextView) findViewById(R.id.label);
+//        myTextbox = (EditText) findViewById(R.id.entry);
 
         int LOCATION_REFRESH_TIME = 1000;
         int LOCATION_REFRESH_DISTANCE = 5;
@@ -93,8 +93,11 @@ public class MainActivity extends AppCompatActivity implements
 
         provider = locationManager.getBestProvider(new Criteria(), false);
 
-        checkLocationPermission();
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, (android.location.LocationListener) mLocationListener);
+        /*************************************************************************************************
+        TODO: checkLocationPermission();
+        TODO: mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, (android.location.LocationListener) mLocationListener);
+************************************************************************************************************************
+         * */
 
         //Open Button
         openButton.setOnClickListener(new View.OnClickListener()
@@ -105,24 +108,10 @@ public class MainActivity extends AppCompatActivity implements
                 {
                     findBT();
                     openBT();
-                    //findLocation();
                 }
                 catch (IOException ex) { }
             }
         });
-
-        //Send Button
-        /*sendButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                try
-                {
-                    sendData();
-                }
-                catch (IOException ex) { }
-            }
-        });*/
 
         //Close button
         closeButton.setOnClickListener(new View.OnClickListener()
@@ -134,6 +123,15 @@ public class MainActivity extends AppCompatActivity implements
                     closeBT();
                 }
                 catch (IOException ex) { }
+            }
+        });
+
+        //Select Contacts
+        btnSelectContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, SelectContacts.class);
+                startActivity(i);
             }
         });
     }
