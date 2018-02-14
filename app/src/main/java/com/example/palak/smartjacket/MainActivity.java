@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements
 
         Button openButton = (Button) findViewById(R.id.open);
         Button closeButton = (Button) findViewById(R.id.close);
+        Button btnAboutDev = (Button) findViewById(R.id.btnAboutDev);
         Button btnSelectContacts = (Button) findViewById(R.id.buttonSelectContacts);
 //        myLabel = (TextView) findViewById(R.id.label);
 //        myTextbox = (EditText) findViewById(R.id.entry);
@@ -131,6 +132,14 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, SelectContacts.class);
+                startActivity(i);
+            }
+        });
+
+        btnAboutDev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, AboutInnovators.class);
                 startActivity(i);
             }
         });
