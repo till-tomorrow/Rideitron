@@ -1,8 +1,10 @@
 package com.example.palak.smartjacket;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -19,6 +21,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Button;
@@ -35,9 +39,11 @@ import android.Manifest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
+/*
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, LocationListener {
 
@@ -94,11 +100,13 @@ public class MainActivity extends AppCompatActivity implements
 
         provider = locationManager.getBestProvider(new Criteria(), false);
 
-        /*************************************************************************************************
+        */
+/*************************************************************************************************
         TODO: checkLocationPermission();
         TODO: mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, (android.location.LocationListener) mLocationListener);
 ************************************************************************************************************************
-         * */
+         * *//*
+
 
         //Open Button
         openButton.setOnClickListener(new View.OnClickListener()
@@ -308,13 +316,15 @@ public class MainActivity extends AppCompatActivity implements
         workerThread.start();
     }
 
-    /*void sendData() throws IOException
+    */
+/*void sendData() throws IOException
     {
         String msg = myTextbox.getText().toString();
         msg += "\n";
         mmOutputStream.write(msg.getBytes());
         myLabel.setText("Data Sent");
-    }*/
+    }*//*
+
 
     void closeBT() throws IOException
     {
@@ -424,6 +434,7 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+*/
 /*    @Override
     protected void onResume() {
         super.onResume();
@@ -444,5 +455,103 @@ public class MainActivity extends AppCompatActivity implements
 
             locationManager.removeUpdates(this);
         }
-    }*/
+    }*//*
+
+}
+*/
+
+public class MainActivity extends AppCompatActivity  {
+    Button b1,b2,b3,b4;
+    private BluetoothAdapter BA;
+    private Set<BluetoothDevice>pairedDevices;
+    ListView lv;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        b1 = (Button) findViewById(R.id.button);
+        b2=(Button)findViewById(R.id.button2);
+        b3=(Button)findViewById(R.id.button3);
+        b4=(Button)findViewById(R.id.button4);
+
+        BA = BluetoothAdapter.getDefaultAdapter();
+        lv = (ListView)findViewById(R.id.listView);
+
+        if (BA == null) {
+            // Device doesn't support Bluetooth
+            Toast.makeText(MainActivity.this, "Device doesn't support Bluetooth", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void on(View v){
+        if (!BA.isEnabled()) {
+            Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(turnOn, 1);
+            Toast.makeText(getApplicationContext(), "Turned on",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Already on", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void off(View v){
+        BA.disable();
+        Toast.makeText(MainActivity.this, "Turned off" ,Toast.LENGTH_LONG).show();
+    }
+
+
+    public  void visible(View v){
+        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);       //always discoverable
+        startActivity(discoverableIntent);
+    }
+
+
+    public void list(View v){
+        pairedDevices = BA.getBondedDevices();
+
+        if(pairedDevices.size() > 0){
+            ArrayList list = new ArrayList();
+
+            for(BluetoothDevice bt : pairedDevices) {
+                list.add(bt.getName());
+                Toast.makeText(MainActivity.this, bt.getAddress() + "MAC address",Toast.LENGTH_LONG).show();
+            }
+
+            final ArrayAdapter adapter = new  ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1, list);
+
+            lv.setAdapter(adapter);
+        }
+        else{
+            Toast.makeText(MainActivity.this, "No paired devices yet!", Toast.LENGTH_LONG).show();
+        }
+
+        // Register for broadcasts when a device is discovered.
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(mReceiver, filter);
+    }
+
+    // Create a BroadcastReceiver for ACTION_FOUND.
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Discovery has found a device. Get the BluetoothDevice
+                // object and its info from the Intent.
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Don't forget to unregister the ACTION_FOUND receiver.
+        unregisterReceiver(mReceiver);
+    }
+
 }

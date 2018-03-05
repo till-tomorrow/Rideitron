@@ -12,26 +12,26 @@
     android:alpha="0.9"
     tools:context="com.example.palak.smartjacket.MainActivity">
 
-    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <!--&lt;!&ndash;<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        tools:ignore="TextFields,HardcodedText" >-->
+        tools:ignore="TextFields,HardcodedText" >&ndash;&gt;
 
-        <!--<TextView
+        &lt;!&ndash;<TextView
             android:id="@+id/label"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:text="Current Latitude and Longitude:" />-->
+            android:text="Current Latitude and Longitude:" />&ndash;&gt;
 
-       <!-- <EditText
+       &lt;!&ndash; <EditText
             android:id="@+id/entry"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/label"
             android:background="@android:drawable/editbox_background" />
--->
+&ndash;&gt;
 
     <Button
 
@@ -85,10 +85,100 @@
         android:alpha="0.9"
         android:textColor="#fff"
         android:background="@drawable/circularbutton"
-        android:layout_above="@+id/button"
+        android:layout_marginBottom="32dp"
+        android:layout_above="@+id/btnAboutDev"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="36dp" />
+        android:layout_alignParentEnd="true" />
+-->
 
+
+
+
+    <TextView android:text="Bluetooth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textview"
+        android:textSize="35dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:id="@+id/textView"
+        android:layout_below="@+id/textview"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ff7aff24"
+        android:textSize="35dp" />
+
+    <ImageView
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:id="@+id/imageView"
+        android:src="@drawable/logo"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:theme="@style/Base.TextAppearance.AppCompat" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get visible"
+        android:onClick="visible"
+        android:id="@+id/button2"
+        android:layout_alignBottom="@+id/button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="turn off"
+        android:onClick="off"
+        android:id="@+id/button4"
+        android:layout_below="@+id/button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/button"
+        android:layout_alignStart="@+id/button"
+        android:layout_below="@+id/textView2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Paired devices:"
+        android:id="@+id/textView2"
+        android:textColor="#ee34ff96"
+        android:textSize="25dp"
+        android:layout_below="@+id/button4"
+        android:layout_alignLeft="@+id/listView"
+        android:layout_alignStart="@+id/listView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Turn On"
+        android:id="@+id/button"
+        android:clickable="true"
+        android:onClick="on"
+        android:layout_below="@+id/textView"
+        android:layout_toLeftOf="@+id/textview"
+        android:layout_toStartOf="@+id/textview" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List devices"
+        android:onClick="list"
+        android:id="@+id/button3"
+        android:layout_below="@+id/button2"
+        android:layout_toRightOf="@+id/button2"
+        android:layout_toEndOf="@+id/button2" />
 
 </RelativeLayout>
