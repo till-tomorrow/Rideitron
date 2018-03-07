@@ -39,6 +39,8 @@ import android.Manifest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
@@ -461,6 +463,7 @@ public class MainActivity extends AppCompatActivity implements
 */
 
 public class MainActivity extends AppCompatActivity  {
+    private static final String TAG = "TAG";
     Button b1,b2,b3,b4;
     private BluetoothAdapter BA;
     private Set<BluetoothDevice>pairedDevices;
@@ -473,7 +476,7 @@ public class MainActivity extends AppCompatActivity  {
 
         b1 = (Button) findViewById(R.id.button);
         b2=(Button)findViewById(R.id.button2);
-        b3=(Button)findViewById(R.id.button3);
+//        b3=(Button)findViewById(R.id.button3);
         b4=(Button)findViewById(R.id.button4);
 
         BA = BluetoothAdapter.getDefaultAdapter();
@@ -483,6 +486,7 @@ public class MainActivity extends AppCompatActivity  {
             // Device doesn't support Bluetooth
             Toast.makeText(MainActivity.this, "Device doesn't support Bluetooth", Toast.LENGTH_LONG).show();
         }
+
     }
 
     public void on(View v){
@@ -490,6 +494,31 @@ public class MainActivity extends AppCompatActivity  {
             Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(turnOn, 1);
             Toast.makeText(getApplicationContext(), "Turned on",Toast.LENGTH_LONG).show();
+
+            if(BA.startDiscovery()){
+                Toast.makeText(MainActivity.this, "Started Searching for nearby devices", Toast.LENGTH_LONG).show();
+            }
+
+            /*BluetoothDevice device = BA.getRemoteDevice("98:D3:36:00:C2:BD");
+            BluetoothSocket tmp = null;
+            BluetoothSocket mmSocket = null;*/
+
+            //Get a BluetoothSocket for a connection wwith the given BluetoothDevice
+            /*try{
+                tmp = device.createRfcommSocketToServiceRecord(UUID.fromString("f5028282db7e3abb"));
+                Method m = device.getClass().getMethod("createRfcommSocket", new Class[] {int.class});
+                tmp = (BluetoothSocket) m.invoke(device, 1);
+                Toast.makeText(MainActivity.this, "ACCIDENT has been met", Toast.LENGTH_LONG).show();
+            }catch (IOException e){
+                Log.e(TAG, "create() failed", e);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            mmSocket = tmp;*/
         } else {
             Toast.makeText(getApplicationContext(), "Already on", Toast.LENGTH_LONG).show();
         }
@@ -508,7 +537,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-    public void list(View v){
+    /*public void list(View v){
         pairedDevices = BA.getBondedDevices();
 
         if(pairedDevices.size() > 0){
@@ -531,7 +560,7 @@ public class MainActivity extends AppCompatActivity  {
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
     }
-
+*/
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
@@ -542,6 +571,9 @@ public class MainActivity extends AppCompatActivity  {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress(); // MAC address
+                if(deviceHardwareAddress.equals("98:D3:36:00:C2:BD") && deviceName.equals("BT-14")){
+                    Toast.makeText(MainActivity.this, "ACCIDENT has met", Toast.LENGTH_LONG).show();
+                }
             }
         }
     };
@@ -551,7 +583,7 @@ public class MainActivity extends AppCompatActivity  {
         super.onDestroy();
 
         // Don't forget to unregister the ACTION_FOUND receiver.
-        unregisterReceiver(mReceiver);
+        //unregisterReceiver(mReceiver);
     }
 
 }

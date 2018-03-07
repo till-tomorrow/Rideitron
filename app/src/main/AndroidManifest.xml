@@ -43,6 +43,13 @@
         <activity android:name=".SelectContacts"></activity>
         <activity android:name=".AboutInnovators"></activity>
 
+
+
+
+        <!--<activity android:name=".ListActivity"></activity>-->
+
+
+
     </application>
 
 </manifest>
